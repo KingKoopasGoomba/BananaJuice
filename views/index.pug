@@ -42,19 +42,19 @@ block content
                 input(type='hidden', name='name',id="name", value=val.name)
                 a(onclick="document.getElementById('" + val.name + "').submit();")
                   //- a(href="/bees?name=" + val.name)
-                  img(src=("images/" + val.img), alt=val.name)
+                  img(src=("images/" + val.thumbnail), alt=val.name)
                   h3=val.name
                   p.card-text
                     | #{val.desc}
         else
           each val in result
             if val.name === type.name
-              .card
-                a(href="/bees?name=" + val.name)
-                    img(src=("images/" + val.name + ".jpg"), alt=val.name)
-                    h3=val.name
-                    p.card-text
-                      | #{val.desclong}
+              .video
+                //- img(src=("images/" + val.name + ".jpg"), alt=val.name)
+                video(src="videos/" + val.path type="video/mp4" width=1000 autoplay)
+                h3=val.name
+                p.card-text
+                  | #{val.desclong}
 
   footer.text-muted
     .container

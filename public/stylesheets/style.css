@@ -91,10 +91,3 @@ footer {
 footer p {
   margin-bottom: .25rem;
 }
-
-
-@media screen and (max-width: 700px) {
-  *{
-    background-color: green !important;
-  }
-}

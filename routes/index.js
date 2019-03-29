@@ -8,9 +8,9 @@ var globalResults;
 
 mongoClient.connect(url, function(err, db){
   if(err) throw err;
-  var dbo = db.db("mydb");
-  var query = {_id: 0, name: 1, img: 1, desc: 1, desclong: 1};
-  dbo.collection("customers").find({},{projection: query}).toArray(function(err, result){
+  var dbo = db.db("BananaJuice");
+  var query = {_id: 0, name: 1, path:1, desc:1, thumbnail:1};
+  dbo.collection("Videos").find({},{projection: query}).toArray(function(err, result){
     if(err) throw err;
     globalResults = result;
     console.log(result);
