@@ -42,7 +42,7 @@ block content
                 input(type='hidden', name='name',id="name", value=val.name)
                 a(onclick="document.getElementById('" + val.name + "').submit();")
                   //- a(href="/bees?name=" + val.name)
-                  img(src=("/images/" + val.img), alt=val.name)
+                  img(src=("images/" + val.img), alt=val.name)
                   h3=val.name
                   p.card-text
                     | #{val.desc}
@@ -51,7 +51,7 @@ block content
             if val.name === type.name
               .card
                 a(href="/bees?name=" + val.name)
-                    img(src=("/images/" + val.name + ".jpg"), alt=val.name)
+                    img(src=("images/" + val.name + ".jpg"), alt=val.name)
                     h3=val.name
                     p.card-text
                       | #{val.desclong}
