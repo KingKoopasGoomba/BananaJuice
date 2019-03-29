@@ -1,0 +1,93 @@
+extends layout
+
+block content
+  #navbarHeader.collapse.bg-inverse
+    .container
+      .row
+        .col-sm-8.py-4
+          h4.text-white About
+          p.text-muted
+            | Add some information about the album below, the author, or any other background context. 
+            | Make it a few sentences long so folks can pick up some informative tidbits. 
+            | Then, link them off to some social networking sites or contact information.
+        .col-sm-4.py-4
+          h4.text-white Contact
+          ul.list-unstyled
+            li
+              a.text-white(href="#") Follow on Twitter
+            li
+              a.text-white(href="#") Like on Facebook
+            li
+              a.text-white(href="#") Email me
+  .navbar.navbar-inverse.bg-inverse
+    .container.d-flex.justify-content-between
+      a.navbar-brand(href="#") Album
+      button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation")
+        span.navbar-toggler-icon 
+  section.jumbotron.text-center
+    .container
+      h1.jumbotron-heading Album example
+      p.lead.text-muted
+        | Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.
+      p
+        a.btn.btn-primary(href="/") Home
+        a.btn.btn-secondary(href="/") Home
+  .album.text-muted
+    .container
+      .row
+        unless bee
+          each val in result
+            .card
+              form(id=val.name, method='post', action='bees')
+                input(type='hidden', name='name',id="name", value=val.name)
+                a(onclick="document.getElementById('" + val.name + "').submit();")
+                  //- a(href="/bees?name=" + val.name)
+                  img(src=("/images/" + val.img), alt=val.name)
+                  h3=val.name
+                  p.card-text
+                    | #{val.desc}
+        else
+          each val in result
+            if val.name === type.name
+              .card
+                a(href="/bees?name=" + val.name)
+                    img(src=("/images/" + val.name + ".jpg"), alt=val.name)
+                    h3=val.name
+                    p.card-text
+                      | #{val.desclong}
+
+  footer.text-muted
+    .container
+      p.float-right
+        a(href="#") Back to top
+      p Album example is © Bootstrap, but please download and customize it for yourself!
+      p
+        | New to Bootstrap? 
+        a(href="../../") Visit the homepage
+        |  or read our 
+        a(href="../../getting-started/") getting started guide
+        | .
+  //
+    Bootstrap core JavaScript
+    ==================================================
+  // Placed at the end of the document so the pages load faster
+  script(src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous")
+  script.
+    window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\\/script>')
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous")
+  script(src="../../assets/js/vendor/holder.min.js")
+  script.
+    $(function () {
+    Holder.addTheme("thumb", { background: "#55595c", foreground: "#eceeef", text: "Thumbnail" });
+    });
+  script(src="../../dist/js/bootstrap.min.js")
+  // IE10 viewport hack for Surface/desktop Windows 8 bug
+  script(src="../../assets/js/ie10-viewport-bug-workaround.js")
+  script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
+  link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
+  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
+  link(rel='stylesheet', href='/stylesheets/style.css')
+
+
+  
