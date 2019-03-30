@@ -5,7 +5,7 @@ block content
     .container
       .row
         .col-sm-8.py-4
-          h4.text-white About
+          h4.text-white Banana Juice
           p.text-muted
             | Add some information about the album below, the author, or any other background context. 
             | Make it a few sentences long so folks can pick up some informative tidbits. 
@@ -21,7 +21,7 @@ block content
               a.text-white(href="#") Email me
   .navbar.navbar-inverse.bg-inverse
     .container.d-flex.justify-content-between
-      a.navbar-brand(href="#") Album
+      a.navbar-brand(href="#") Banana Juice
       button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation")
         span.navbar-toggler-icon 
   section.jumbotron.text-center
@@ -32,29 +32,40 @@ block content
       p
         a.btn.btn-primary(href="/") Home
         a.btn.btn-secondary(href="/") Home
-  .album.text-muted
+  .album.text-muted#album
     .container
       .row
         unless bee
           each val in result
             .card
-              form(id=val.name, method='post', action='bees')
-                input(type='hidden', name='name',id="name", value=val.name)
-                a(onclick="document.getElementById('" + val.name + "').submit();")
-                  //- a(href="/bees?name=" + val.name)
-                  img(src=("images/" + val.thumbnail), alt=val.name)
-                  h3=val.name
-                  p.card-text
-                    | #{val.desc}
-        else
-          each val in result
-            if val.name === type.name
-              .video
-                //- img(src=("images/" + val.name + ".jpg"), alt=val.name)
-                video(src="videos/" + val.path type="video/mp4" width=1000 autoplay)
+              //- form(id=val.name, method='post', action='bees')
+              //-   input(type='hidden', name='name',id="name", value=val.name)
+              //-   a(onclick="document.getElementById('" + val.name + "').submit();")
+              a(href="/bees?name=" + val.name + "#album")
+                img(src=("images/" + val.thumbnail), alt=val.name)
                 h3=val.name
                 p.card-text
-                  | #{val.desclong}
+                  if val.desc.length > 50
+                    | #{val.desc.substring(0,50)} . . .
+                  else
+                    | #{val.desc}
+      if bee
+        each val in result
+          if val.name === type.name
+            //- video(src="videos/" + val.path type='video/mp4', onmouseover='dataset.over=true;controls=true', onmouseout='delete dataset.over;if(paused) controls=false;', onplay='controls=true', onpause='if(!dataset.over && !dataset.focus) controls=false', onfocusin='dataset.focus=true; controls=true', onfocusout='delete dataset.focus; if(paused) controls=false;')
+          
+            //- .wrapper
+            //-   video.videoInsert(onmouseover='dataset.over=true;controls=true', onmouseout='delete dataset.over;if(paused) controls=false;', onplay='controls=true', onpause='if(!dataset.over && !dataset.focus) controls=false', onfocusin='dataset.focus=true; controls=true', onfocusout='delete dataset.focus; if(paused) controls=false;')
+            //-     source(src='http://www.w3schools.com/html/movie.mp4', type='video/mp4')
+            //-     |   Your browser does not support the video tag.
+
+            video.videoInsert(controls='', autoplay='', onmouseover='dataset.over=true;controls=true', onmouseout='delete dataset.over;if(paused) controls=false;', onplay='controls=true', onpause='if(!dataset.over && !dataset.focus) controls=false', onfocusin='dataset.focus=true; controls=true', onfocusout='delete dataset.focus; if(paused) controls=false;')
+              source(src="videos/" + val.path, type='video/mp4')
+              |   Your browser does not support the video tag.
+
+            h3=val.name
+            p.card-text
+              | #{val.desc}
 
   footer.text-muted
     .container

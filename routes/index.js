@@ -13,7 +13,6 @@ mongoClient.connect(url, function(err, db){
   dbo.collection("Videos").find({},{projection: query}).toArray(function(err, result){
     if(err) throw err;
     globalResults = result;
-    console.log(result);
     db.close();
   });
 });
@@ -24,13 +23,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.post("/bees",function(req, res){
-  console.log(req);
-  console.log(req.body.name);
-  console.log(req.body);
   res.render("index", {result: globalResults, type: req.body, bee: true});
 });
 
-router.get("/bees" , function(req, res){
+router.get("/bees#video" , function(req, res){
   res.render("index", {result: globalResults, type:req.query, bee: true});
 });
 
