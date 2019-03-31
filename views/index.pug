@@ -32,41 +32,45 @@ block content
       p
         a.btn.btn-primary(href="/") Home
         a.btn.btn-secondary(href="/") Home
-  .album.text-muted#album
+  section.album.text-muted#album
     .container
       .row
         unless bee
-          each val in result
+          each val in results
             .card
-              //- form(id=val.name, method='post', action='bees')
-              //-   input(type='hidden', name='name',id="name", value=val.name)
-              //-   a(onclick="document.getElementById('" + val.name + "').submit();")
               a(href="/bees?name=" + val.name + "#album")
                 img(src=("images/" + val.thumbnail), alt=val.name)
                 h3=val.name
+                //- https://github.com/onedesign/express-socketio-tutorial
+                script(src="/socket.io/socket.io.js")
+                script.
+                  var socket = io('//localhost:3000');
+                  socket.on('socketToMe', function (data) {
+                    console.log(data);
+                  });
+
                 p.card-text
                   if val.desc.length > 50
                     | #{val.desc.substring(0,50)} . . .
                   else
                     | #{val.desc}
       if bee
-        each val in result
+        each val in results
           if val.name === type.name
-            //- video(src="videos/" + val.path type='video/mp4', onmouseover='dataset.over=true;controls=true', onmouseout='delete dataset.over;if(paused) controls=false;', onplay='controls=true', onpause='if(!dataset.over && !dataset.focus) controls=false', onfocusin='dataset.focus=true; controls=true', onfocusout='delete dataset.focus; if(paused) controls=false;')
-          
-            //- .wrapper
-            //-   video.videoInsert(onmouseover='dataset.over=true;controls=true', onmouseout='delete dataset.over;if(paused) controls=false;', onplay='controls=true', onpause='if(!dataset.over && !dataset.focus) controls=false', onfocusin='dataset.focus=true; controls=true', onfocusout='delete dataset.focus; if(paused) controls=false;')
-            //-     source(src='http://www.w3schools.com/html/movie.mp4', type='video/mp4')
-            //-     |   Your browser does not support the video tag.
-
             video.videoInsert(controls='', autoplay='', onmouseover='dataset.over=true;controls=true', onmouseout='delete dataset.over;if(paused) controls=false;', onplay='controls=true', onpause='if(!dataset.over && !dataset.focus) controls=false', onfocusin='dataset.focus=true; controls=true', onfocusout='delete dataset.focus; if(paused) controls=false;')
               source(src="videos/" + val.path, type='video/mp4')
               |   Your browser does not support the video tag.
-
             h3=val.name
             p.card-text
               | #{val.desc}
-
+  if bee
+    section.comments.text-center
+      h3 this is the comment section :)
+      form(action="#comments", method="post", id="commentForm")
+        textarea(name="comment", id="comment" cols="50", rows="5")
+        input(type="submit", value="Comment")
+      for result in results
+        p=result.comments
   footer.text-muted
     .container
       p.float-right
