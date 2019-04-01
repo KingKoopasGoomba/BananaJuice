@@ -1,24 +1,61 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const mongoose = require('mongoose');
+const logger = require('morgan');
+const configKeys = require('./config/keys');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const upload = require('express-fileupload');
+const app = express();
 
-var indexRouter = require('./routes/index');
+// passport config
+require('./lib/passport')(passport);
 
-var app = express();
+//connect to mongo
+mongoose.connect(configKeys.MongoURI, {useNewUrlParser: true})
+    .then(() => console.log("mongobd connected"))
+    .catch(err => console.log(err));
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// view engine
 app.set('view engine', 'pug');
-
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+// file upload
+app.use(upload());
+// Bodyparser
+app.use(express.urlencoded({extended: false}));
+
+
+//Express session
+app.use(session({
+  secret: '[dank meme here]',
+  resave: true,
+  saveUninitialized: true,
+ // cookie: { maxAge: 6000 }
+}));
+
+//Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+//Connect flash
+app.use(flash());
+
+//global vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
+
+// Routes
+app.use('/',      require('./routes/index'));
+app.use('/users', require('./routes/users'));
+app.use('/video', require('./routes/videos'));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

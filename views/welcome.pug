@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .row.mt-5
+    .col-md-6.m-auto
+      .card.card-body.text-center
+        if (error_msg !== '')
+          =error_msg
+        h1
+          i.fab.fa-node-js.fa-3x
+        p Create an account or login
+        a.btn.btn-primary.btn-block.mb-2(href='/users/register') Register
+        a.btn.btn-secondary.btn-block(href='/users/login') Login
+
+        div
+          for category in categories
+            =category
+            for video in videos
+              if (video.category === category)
+                div
+                  a(href='/video/playback/'+video.id)
+                    p=video.name

@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+    //use builtin html5 video player
+    div
+        h1=video.name
+    video(id="videoPlayer" controls autoplay)
+        source(src='/video/media/'+video.id type=video.mimeType)
+    div
+        =video.category
+        =video.description

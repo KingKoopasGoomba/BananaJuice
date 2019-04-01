@@ -1,37 +1,24 @@
-var express = require('express');
-var router = express.Router();
-
-var mongoClient = require('mongodb').MongoClient;
-var url = "mongodb://ec2-35-173-232-43.compute-1.amazonaws.com:27017/";
-
-var globalResults;
-
-mongoClient.connect(url, function(err, db){
-  if(err) throw err;
-  var dbo = db.db("mydb");
-  var query = {_id: 0, name: 1, img: 1, desc: 1, desclong: 1};
-  dbo.collection("customers").find({},{projection: query}).toArray(function(err, result){
-    if(err) throw err;
-    globalResults = result;
-    console.log(result);
-    db.close();
-  });
-});
+const express = require('express');
+const router = express.Router();
+const Videos = require('../models/Video');
+const categories = require('../config/keys').videoCategories;
+//const { ensureAuthenticated } = require('../config/auth');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { result: globalResults });
+router.get('/', (req, res) => {
+    Videos.find({})
+        .then(videos =>{
+            res.render('welcome', {categories: categories, videos: videos})
+        })
 });
 
-router.post("/bees",function(req, res){
-  console.log(req);
-  console.log(req.body.name);
-  console.log(req.body);
-  res.render("index", {result: globalResults, type: req.body, bee: true});
-});
-
-router.get("/bees" , function(req, res){
-  res.render("index", {result: globalResults, type:req.query, bee: true});
+router.get('/dashboard', (req, res) => {
+    if (req.user) {
+        res.render('user/dashboard', {user: req.user.name})
+    } else {
+        req.flash('error_msg','please login first');
+        res.redirect('/users/login')
+    }
 });
 
 module.exports = router;

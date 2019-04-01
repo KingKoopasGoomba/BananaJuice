@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+    h1 Upload file
+    if (error_msg !== '')
+        =error_msg
+    form(method="post" enctype="multipart/form-data" action="/video/upload")
+        .form-group
+            select(name="category")
+                for category in categories
+                    option(value=category)
+                        =category
+        .form-group
+            label Name
+            input(type='text' name='name' placeholder='Enter Name')
+        .form-group
+            label Description
+            input(type='text' name='description' placeholder='Enter Description')
+        .form-group
+            label
+            input(type="file" name="filename" accept="video/mp4, video/webm, video/ogg")
+        input(type="submit" value="upload")
