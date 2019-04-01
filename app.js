@@ -21,6 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+io.on('connection', function(socket){
+  console.log('a user connected');
+});
+
 app.use(function(req, res, next){
   res.io = io;
   next();

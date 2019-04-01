@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var http = require("../bin/www");
-var io = require("socket.io")(http);
 
 var mongoClient = require('mongodb').MongoClient;
 // var url = "mongodb://ec2-35-173-232-43.compute-1.amazonaws.com:27017/";
@@ -24,13 +22,6 @@ function mongo(input){
 
 mongo();
 
-io.on("connection", function(socket){
-  console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'");
-  socket.on("chat message", function(msg){
-    console.log("message: " + msg);
-  });
-});
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.io.emit("socketToMe", "normal / index");
@@ -51,7 +42,7 @@ router.get("/bees", function(req, res){
 router.get("/messages", (req, res) =>{
   Message.find({}, (err, messages) =>{
     res.send(messages);
-  })
+  });
 });
 
 module.exports = router;
