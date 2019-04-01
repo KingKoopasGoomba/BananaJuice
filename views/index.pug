@@ -1,6 +1,13 @@
 extends layout
 
 block content
+  script(src="/socket.io/socket.io.js")
+  script.
+    var socket = io();
+    function buttonFunc(e){
+      socket.emit("chat message", document.getElementById("m").value);
+      document.getElementById("m").value = "";
+    }
   #navbarHeader.collapse.bg-inverse
     .container
       .row
@@ -36,16 +43,16 @@ block content
     .container
       .row
         unless bee
-          script(src="/socket.io/socket.io.js")
-          script.
-            var socket = io('//localhost:3000');
-            socket.on('socketToMe', function (data) {
-              console.log(data);
-              socket.emit("chat message", "Hello there general");
-              socket.on("disconnect", function(){
-                console.log("user disconnected");
-              })
-            });
+          //- script(src="/socket.io/socket.io.js")
+          //- script.
+          //-   var socket = io('//localhost:3000');
+          //-   socket.on('socketToMe', function (data) {
+          //-     console.log(data);
+          //-     socket.emit("chat message", "Hello there general");
+          //-     socket.on("disconnect", function(){
+          //-       console.log("user disconnected");
+          //-     })
+          //-   });
           each val in results
             .card
               a(href="/bees?name=" + val.name + "#album")
@@ -70,9 +77,9 @@ block content
   if bee
     section.comments.text-center
       h3 this is the comment section :)
-      form(action="#comments", method="post", id="commentForm")
-        textarea(name="comment", id="comment" cols="50", rows="5")
-        input(type="submit", value="Comment")
+      form(action="", onsubmit="event.preventDefault(); buttonFunc();")#commentForm
+        textarea(id="m" cols="50", rows="5")
+        button Submit
       for result in results
         p=result.comments
   footer.text-muted
