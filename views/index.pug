@@ -36,18 +36,22 @@ block content
     .container
       .row
         unless bee
+          script(src="/socket.io/socket.io.js")
+          script.
+            var socket = io('//localhost:3000');
+            socket.on('socketToMe', function (data) {
+              console.log(data);
+              socket.emit("chat message", "Hello there general");
+              socket.on("disconnect", function(){
+                console.log("user disconnected");
+              })
+            });
           each val in results
             .card
               a(href="/bees?name=" + val.name + "#album")
                 img(src=("images/" + val.thumbnail), alt=val.name)
                 h3=val.name
                 //- https://github.com/onedesign/express-socketio-tutorial
-                script(src="/socket.io/socket.io.js")
-                script.
-                  var socket = io('//localhost:3000');
-                  socket.on('socketToMe', function (data) {
-                    console.log(data);
-                  });
 
                 p.card-text
                   if val.desc.length > 50

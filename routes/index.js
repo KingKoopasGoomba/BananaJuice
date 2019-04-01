@@ -9,10 +9,6 @@ var url = "mongodb://localhost:27017/";
 
 var globalResults;
 
-io.on('connection', function(client) {
-  console.log('Client connected...');
-});
-
 function mongo(input){
   mongoClient.connect(url, function(err, db){
     if(err) throw err;
@@ -20,7 +16,6 @@ function mongo(input){
     var query = {_id: 0, name: 1, path:1, desc:1, thumbnail:1, comments:1};
     dbo.collection("Videos").find({},{projection: query}).toArray(function(err, results){
       if(err) throw err;
-      console.log(results);
       globalResults = results;
       db.close();
     });
@@ -29,19 +24,34 @@ function mongo(input){
 
 mongo();
 
+io.on("connection", function(socket){
+  console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'");
+  socket.on("chat message", function(msg){
+    console.log("message: " + msg);
+  });
+});
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.io.emit("socketToMe", "users");
+  res.io.emit("socketToMe", "normal / index");
   res.render('index', { results: globalResults });
 });
 
 router.post("/bees",function(req, res){
+  res.io.emit("socketToMe", "bees post");
   res.render("index", {results: globalResults, type: req.body, bee: true});
 });
 
-router.get("/bees" , function(req, res){
-  console.log(req.query)
+router.get("/bees", function(req, res){
+  console.log(req.query);
+  res.io.emit("socketToMe", "bees get");
   res.render("index", {results: globalResults, type:req.query, bee: true});
+});
+
+router.get("/messages", (req, res) =>{
+  Message.find({}, (err, messages) =>{
+    res.send(messages);
+  })
 });
 
 module.exports = router;
