@@ -14,6 +14,7 @@ function mongo(input){
     var query = {_id: 0, name: 1, path:1, desc:1, thumbnail:1, comments:1};
     dbo.collection("Videos").find({},{projection: query}).toArray(function(err, results){
       if(err) throw err;
+      console.log(results);
       globalResults = results;
       db.close();
     });
@@ -45,4 +46,5 @@ router.get("/messages", (req, res) =>{
   });
 });
 
+module.exports = {mongo: mongoClient, url: url};
 module.exports = router;

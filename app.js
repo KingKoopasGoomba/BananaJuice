@@ -3,6 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoClient = require("./routes/index").mongo;
+var url = require("./routes/index").url;
+
+function mongo(input){
+  mongoClient.connect(url, function(err, db){
+    if(err) throw err;
+    var dbo = db.db("BananaJuice");
+    var myobj = {name:}
+  });
+}
 
 var indexRouter = require('./routes/index');
 
