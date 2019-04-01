@@ -1,4 +1,9 @@
 node_modules/
 .vscode/
 .idea/
-public/videos/
+
+public/*
+!public/thumbnails
+
+public/thumbnails/*
+!public/thumbnails/.git*

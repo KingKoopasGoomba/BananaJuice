@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
-const mongoose = require('mongoose');
+const mongoose = reuire('mongoose');
 const logger = require('morgan');
 const configKeys = require('./config/keys');
 const flash = require('connect-flash');
@@ -25,7 +25,7 @@ app.use(logger('dev'));
 app.use(upload());
 // Bodyparser
 app.use(express.urlencoded({extended: false}));
-
+app.use(express.static(__dirname+ '/public'));
 
 //Express session
 app.use(session({
@@ -38,7 +38,6 @@ app.use(session({
 //Passport
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 //Connect flash
 app.use(flash());
