@@ -25,7 +25,7 @@ mongo();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.io.emit("socketToMe", "normal / index");
-  res.render('index', { results: globalResults });
+  res.render('index', { results: globalResults, type: "", bee: false });
 });
 
 router.post("/bees",function(req, res){

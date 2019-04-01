@@ -4,8 +4,11 @@ block content
   script(src="/socket.io/socket.io.js")
   script.
     var socket = io();
-    function buttonFunc(e){
-      socket.emit("chat message", document.getElementById("m").value);
+    function messageFormFunc(e){
+      console.log(typeof #{bee});
+      if(#{bee}){
+        socket.emit("chat message", {message: document.getElementById("m").value, name: "#{type.name}"});
+      }
       document.getElementById("m").value = "";
     }
   #navbarHeader.collapse.bg-inverse
@@ -77,9 +80,9 @@ block content
   if bee
     section.comments.text-center
       h3 this is the comment section :)
-      form(action="", onsubmit="event.preventDefault(); buttonFunc();")#commentForm
+      form(action="", onsubmit="event.preventDefault(); messageFormFunc();")#commentForm
         textarea(id="m" cols="50", rows="5")
-        button Submit
+        button#messageButton Submit
       for result in results
         p=result.comments
   footer.text-muted
