@@ -6,7 +6,9 @@ block content
         =error_msg
     form(method="post" enctype="multipart/form-data" action="/video/upload")
         .form-group
-            select(name="category")
+            label Category:
+            input(name="category")
+            datalist
                 for category in categories
                     option(value=category)
                         =category

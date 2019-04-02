@@ -14,9 +14,9 @@ block content
 
         div
           for category in categories
-            =category
+            =category.name
             for video in videos
-              if (video.category === category)
+              if (video.category === category.name)
                 div
                   a(href='/video/playback/'+video.id)
                     p=video.name
