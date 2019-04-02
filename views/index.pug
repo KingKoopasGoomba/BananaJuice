@@ -50,12 +50,12 @@ block content
             h3=result.name
             p.card-text
               | #{result.description}
-  if bee
-    section.comments.text-center
-      h3 this is the comment section :)
-      form(action="", onsubmit="event.preventDefault(); messageFormFunc();")#commentForm
-        textarea(id="m" cols="50", rows="5")
-        button#messageButton Submit
+  //- if bee
+  //-   section.comments.text-center
+  //-     h3 this is the comment section :)
+  //-     form(action="", onsubmit="event.preventDefault(); messageFormFunc();")#commentForm
+  //-       textarea(id="m" cols="50", rows="5")
+  //-       button#messageButton Submit
       //- ul#commentArea   
       //-   for result in results
       //-     if type.id == result.id
