@@ -125,3 +125,14 @@ footer p {
 #commentArea li:hover{
   border: solid 1px aliceblue;
 }
+
+#messageButton{
+  background-color: #15161A;
+  opacity: 0.5;
+  color: white;
+  border: 0;
+}
+
+#messageButton:hover{
+  background-color: red;
+}
