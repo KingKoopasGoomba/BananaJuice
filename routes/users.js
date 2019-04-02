@@ -5,11 +5,19 @@ const User = require('../models/User');
 const passport = require('passport');
 // login page
 router.get('/login', (req, res, next) => {
+  if (req.user) {
+    res.redirect('/dashboard');
+    return;
+  }
   res.render('user/login');
 });
 
 //Login handle
 router.post('/login',(req, res, next) => {
+  if (req.user) {
+    res.redirect('/dashboard');
+    return;
+  }
   passport.authenticate('local',{
     successRedirect: '/dashboard',
     failureRedirect: '/users/login',
@@ -26,11 +34,19 @@ router.get('/logout',(req, res, next) => {
 
 // register page
 router.get('/register', (req, res, next) => {
+  if (req.user) {
+    res.redirect('/dashboard');
+    return;
+  }
   res.render('user/register');
 });
 
 //register handle
 router.post('/register', (req, res, next) =>{
+  if (req.user) {
+    res.redirect('/dashboard');
+    return;
+  }
   const {name, email, password, password2 } = req.body;
   let errors = [];
 
