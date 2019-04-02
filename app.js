@@ -6,12 +6,12 @@ var logger = require('morgan');
 var mongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 
-function mongo(input){
+function mongo(message, name){
   mongoClient.connect(url, function(err, db){
     if(err) throw err;
     var dbo = db.db("BananaJuice");
-    var myQuery = {name: "juice"};
-    var newVal = {$push: {comments: {user: "anonymous", comment:input, time:Date.now()}}};
+    var myQuery = {name: name};
+    var newVal = {$push: {comments: {user: "anonymous", comment:message, time:Date.now()}}};
     dbo.collection("Videos").updateOne(myQuery, newVal, function(err, res){
       if(err) throw err;
       console.log("Comment added");
@@ -44,7 +44,7 @@ io.on('connection', function(socket){
   });
   socket.on("chat message", function(msg){
     console.log("From: " + msg.name + "    Message: " + msg.message);
-    mongo(msg.message);
+    mongo(msg.message, msg.name);
   });
 });
 

@@ -67,7 +67,8 @@ block content
         for result in results
           if type.name == result.name
             for comment in result.comments
-              li=comment.comment
+              li From #{comment.user}
+                p=comment.comment
   footer.text-muted
     .container
       p.float-right
@@ -105,13 +106,15 @@ block content
   script.
     var socket = io();
     function messageFormFunc(e){
-      console.log(typeof #{bee});
       if(#{bee}){
         socket.emit("chat message", {message: document.getElementById("m").value, name: "#{type.name}"});
         //- document.getElementById("commentArea").innerHTML += "<li>#{type.name}</li>";
         var ul = document.getElementById("commentArea");
         var li = document.createElement("li");
-        li.appendChild(document.createTextNode(document.getElementById("m").value));
+        var para = document.createElement("p");
+        li.appendChild(document.createTextNode("From anonymous:"));
+        para.appendChild(document.createTextNode(document.getElementById("m").value));
+        li.appendChild(para);
         ul.appendChild(li);
       }
       document.getElementById("m").value = "";
