@@ -1,24 +1,17 @@
 extends layout
 
 block content
+
   #navbarHeader.collapse.bg-inverse
     .container
       .row
-        .col-sm-8.py-4
-          h4.text-white Banana Juice
-          p.text-muted
-            | Add some information about the album below, the author, or any other background context. 
-            | Make it a few sentences long so folks can pick up some informative tidbits. 
-            | Then, link them off to some social networking sites or contact information.
-        .col-sm-4.py-4
-          h4.text-white Contact
-          ul.list-unstyled
-            li
-              a.text-white(href="#") Follow on Twitter
-            li
-              a.text-white(href="#") Like on Facebook
-            li
-              a.text-white(href="#") Email me
+        .card.card-body.text-center
+            if (error_msg !== '')
+            =error_msg
+            p Create an account or login
+            a.btn.btn-primary.btn-block.mb-2(href='/users/register') Register
+            a.btn.btn-secondary.btn-block(href='/users/login') Login
+
   .navbar.navbar-inverse.bg-inverse
     .container.d-flex.justify-content-between
       a.navbar-brand(href="#") Banana Juice
@@ -38,37 +31,37 @@ block content
         unless bee
           each result in results
             .card
-              a(href="/bees?name=" + result.name + "#album")
+              a(href="/bees?id=" + result.id + "#album")
                 img(src=("images/" + result.thumbnail), alt=result.name)
                 h3=result.name
                 //- https://github.com/onedesign/express-socketio-tutorial
 
                 p.card-text
-                  if result.desc.length > 50
-                    | #{result.desc.substring(0,50)} . . .
+                  if result.description.length > 50
+                    | #{result.description.substring(0,50)} . . .
                   else
-                    | #{result.desc}
+                    | #{result.description}
       if bee
         each result in results
-          if result.name === type.name
+          if result.id == type.id
             video.videoInsert(controls='', autoplay='', onmouseover='dataset.over=true;controls=true', onmouseout='delete dataset.over;if(paused) controls=false;', onplay='controls=true', onpause='if(!dataset.over && !dataset.focus) controls=false', onfocusin='dataset.focus=true; controls=true', onfocusout='delete dataset.focus; if(paused) controls=false;')
-              source(src="videos/" + result.path, type='video/mp4')
+              source(src='/video/media/'+ result.id, type=result.mimeType)
               |   Your browser does not support the video tag.
             h3=result.name
             p.card-text
-              | #{result.desc}
+              | #{result.description}
   if bee
     section.comments.text-center
       h3 this is the comment section :)
       form(action="", onsubmit="event.preventDefault(); messageFormFunc();")#commentForm
         textarea(id="m" cols="50", rows="5")
         button#messageButton Submit
-      ul#commentArea   
-        for result in results
-          if type.name == result.name
-            for comment in result.comments
-              li From #{comment.user}
-                p=comment.comment
+      //- ul#commentArea   
+      //-   for result in results
+      //-     if type.id == result.id
+      //-       for comment in result.comments
+      //-         li From #{comment.user}
+      //-           p=comment.comment
   footer.text-muted
     .container
       p.float-right
@@ -100,14 +93,13 @@ block content
   script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
   link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
   script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
-  link(rel='stylesheet', href='/stylesheets/style.css')
 
   script(src="/socket.io/socket.io.js")
   script.
     var socket = io();
     function messageFormFunc(e){
       if(#{bee}){
-        socket.emit("chat message", {message: document.getElementById("m").value, name: "#{type.name}"});
+        socket.emit("chat message", {message: document.getElementById("m").value, name: "#{type.id}"});
         //- document.getElementById("commentArea").innerHTML += "<li>#{type.name}</li>";
         var ul = document.getElementById("commentArea");
         var li = document.createElement("li");
@@ -123,7 +115,7 @@ block content
       var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
       if(keyCode == 13){
         evt.preventDefault();
-        socket.emit("chat message", {message: document.getElementById("m").value, name: "#{type.name}"});
+        socket.emit("chat message", {message: document.getElementById("m").value, name: "#{type.id}"});
         //- document.getElementById("commentArea").innerHTML += "<li>#{type.name}</li>";
         var ul = document.getElementById("commentArea");
         var li = document.createElement("li");
@@ -136,5 +128,3 @@ block content
       }
     }
 
-
-  

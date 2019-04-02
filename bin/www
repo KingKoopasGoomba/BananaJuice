@@ -5,13 +5,17 @@
  */
 
 var app = require('../app').app;
-var debug = require('debug')('cart:server');
+var debug = require('debug')('login-thing:server');
+var http = require('http');
+var fs = require('fs');
+var path = require('path');
 
+// fs.mkdirSync(path.resolve('public','videos','thumbnails'),{recursive: true});
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
 /**

@@ -1,4 +1,7 @@
+
 body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: #232730;
   min-height: 75rem; /* Can be removed; just added for demo purposes */
 }
@@ -135,4 +138,8 @@ footer p {
 
 #messageButton:hover{
   background-color: red;
+}
+
+.card{
+  color: aliceblue ;
 }

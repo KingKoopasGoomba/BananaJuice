@@ -1,59 +1,62 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var mongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+const createError = require('http-errors');
+const express = require('express');
+const mongoose = require('mongoose');
+const logger = require('morgan');
+const configKeys = require('./config/keys');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const upload = require('express-fileupload');
+const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
 
-function mongo(message, name){
-  mongoClient.connect(url, function(err, db){
-    if(err) throw err;
-    var dbo = db.db("BananaJuice");
-    var myQuery = {name: name};
-    var newVal = {$push: {comments: {user: "anonymous", comment:message, time:Date.now()}}};
-    dbo.collection("Videos").updateOne(myQuery, newVal, function(err, res){
-      if(err) throw err;
-      console.log("Comment added");
-      db.close();
-    });
-  });
-}
+// passport config
+require('./lib/passport')(passport);
 
-var indexRouter = require('./routes/index');
+//connect to mongo
+mongoose.connect(configKeys.MongoURI, {useNewUrlParser: true})
+    .then(() => console.log("mongobd connected"))
+    .catch(err => console.log(err));
 
-var app = express();
-
-var server = require("http").Server(app);
-var io = require("socket.io")(server);
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// view engine
 app.set('view engine', 'pug');
-
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on("disconnect", function(){
-    console.log("user disconnected");
-  });
-  socket.on("chat message", function(msg){
-    console.log("From: " + msg.name + "    Message: " + msg.message);
-    mongo(msg.message, msg.name);
-  });
-});
+// file upload
+app.use(upload());
+// Bodyparser
+app.use(express.urlencoded({extended: false}));
+app.use(express.static(__dirname+ '/public'));
 
-app.use(function(req, res, next){
-  res.io = io;
+//Express session
+app.use(session({
+  secret: '[dank meme here]',
+  resave: true,
+  saveUninitialized: true,
+ // cookie: { maxAge: 6000 }
+}));
+
+//Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Connect flash
+app.use(flash());
+
+//global vars
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
   next();
 });
 
-app.use('/', indexRouter);
+// Routes
+app.use('/',      require('./routes/index'));
+app.use('/users', require('./routes/users'));
+app.use('/video', require('./routes/videos'));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -71,4 +74,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = {app: app, server: server};
+module.exports = {app:app, server:server};

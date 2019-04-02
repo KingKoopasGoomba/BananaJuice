@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+    link(rel='stylesheet', href='/stylesheets/login.css')
+    .row.mt-5
+        .col-md-6.m-auto
+                h1.text-center.mb-3
+                    i.fas.fa-sign-in-alt
+                    |   Login
+                if (success_msg !== '')
+                    =success_msg
+                if (error_msg !== '')
+                    =error_msg
+                if (error !== '')
+                    =error
+                form(action='/users/login' method='POST')
+                    .form-group
+                        label(for='email') Email
+                        input#email.form-control(type='email' name='email' placeholder='Enter Email')
+                    .form-group
+                        label(for='password') Password
+                        input#password.form-control(type='password' name='password' placeholder='Enter Password')
+                    button.btn.btn-primary.btn-block(type='submit') Login
+                p.lead.mt-4
+                    | No Account?
+                    a(href='/users/register') Register
