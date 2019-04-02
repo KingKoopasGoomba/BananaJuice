@@ -92,7 +92,7 @@ router.post('/register', (req, res, next) =>{
                     req.flash('success_msg','You are now registered');
                     res.redirect('/users/login')
                   })
-                  .catch(err => console.log(err))
+                  .catch(err => console.log(err));
             })
           });
         })

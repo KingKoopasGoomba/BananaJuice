@@ -7,7 +7,10 @@
 var app = require('../app');
 var debug = require('debug')('login-thing:server');
 var http = require('http');
+var fs = require('fs');
+var path = require('path');
 
+fs.mkdirSync(path.resolve('public','videos','thumbnails'),{recursive: true});
 /**
  * Get port from environment and store in Express.
  */

@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
-const mongoose = reuire('mongoose');
+const mongoose = require('mongoose');
 const logger = require('morgan');
 const configKeys = require('./config/keys');
 const flash = require('connect-flash');
