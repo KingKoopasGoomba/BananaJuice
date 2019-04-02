@@ -1,16 +1,6 @@
 extends layout
 
 block content
-  script(src="/socket.io/socket.io.js")
-  script.
-    var socket = io();
-    function messageFormFunc(e){
-      console.log(typeof #{bee});
-      if(#{bee}){
-        socket.emit("chat message", {message: document.getElementById("m").value, name: "#{type.name}"});
-      }
-      document.getElementById("m").value = "";
-    }
   #navbarHeader.collapse.bg-inverse
     .container
       .row
@@ -46,45 +36,38 @@ block content
     .container
       .row
         unless bee
-          //- script(src="/socket.io/socket.io.js")
-          //- script.
-          //-   var socket = io('//localhost:3000');
-          //-   socket.on('socketToMe', function (data) {
-          //-     console.log(data);
-          //-     socket.emit("chat message", "Hello there general");
-          //-     socket.on("disconnect", function(){
-          //-       console.log("user disconnected");
-          //-     })
-          //-   });
-          each val in results
+          each result in results
             .card
-              a(href="/bees?name=" + val.name + "#album")
-                img(src=("images/" + val.thumbnail), alt=val.name)
-                h3=val.name
+              a(href="/bees?name=" + result.name + "#album")
+                img(src=("images/" + result.thumbnail), alt=result.name)
+                h3=result.name
                 //- https://github.com/onedesign/express-socketio-tutorial
 
                 p.card-text
-                  if val.desc.length > 50
-                    | #{val.desc.substring(0,50)} . . .
+                  if result.desc.length > 50
+                    | #{result.desc.substring(0,50)} . . .
                   else
-                    | #{val.desc}
+                    | #{result.desc}
       if bee
-        each val in results
-          if val.name === type.name
+        each result in results
+          if result.name === type.name
             video.videoInsert(controls='', autoplay='', onmouseover='dataset.over=true;controls=true', onmouseout='delete dataset.over;if(paused) controls=false;', onplay='controls=true', onpause='if(!dataset.over && !dataset.focus) controls=false', onfocusin='dataset.focus=true; controls=true', onfocusout='delete dataset.focus; if(paused) controls=false;')
-              source(src="videos/" + val.path, type='video/mp4')
+              source(src="videos/" + result.path, type='video/mp4')
               |   Your browser does not support the video tag.
-            h3=val.name
+            h3=result.name
             p.card-text
-              | #{val.desc}
+              | #{result.desc}
   if bee
     section.comments.text-center
       h3 this is the comment section :)
       form(action="", onsubmit="event.preventDefault(); messageFormFunc();")#commentForm
         textarea(id="m" cols="50", rows="5")
         button#messageButton Submit
-      for result in results
-        p=result.comments
+      ul#commentArea   
+        for result in results
+          if type.name == result.name
+            for comment in result.comments
+              li=comment.comment
   footer.text-muted
     .container
       p.float-right
@@ -117,6 +100,22 @@ block content
   link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
   script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
   link(rel='stylesheet', href='/stylesheets/style.css')
+
+  script(src="/socket.io/socket.io.js")
+  script.
+    var socket = io();
+    function messageFormFunc(e){
+      console.log(typeof #{bee});
+      if(#{bee}){
+        socket.emit("chat message", {message: document.getElementById("m").value, name: "#{type.name}"});
+        //- document.getElementById("commentArea").innerHTML += "<li>#{type.name}</li>";
+        var ul = document.getElementById("commentArea");
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(document.getElementById("m").value));
+        ul.appendChild(li);
+      }
+      document.getElementById("m").value = "";
+    }
 
 
   

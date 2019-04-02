@@ -3,14 +3,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoClient = require("./routes/index").mongo;
-var url = require("./routes/index").url;
+var mongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
 
 function mongo(input){
   mongoClient.connect(url, function(err, db){
     if(err) throw err;
     var dbo = db.db("BananaJuice");
-    var myobj = {name:}
+    var myQuery = {name: "juice"};
+    var newVal = {$push: {comments: {user: "anonymous", comment:input, time:Date.now()}}};
+    dbo.collection("Videos").updateOne(myQuery, newVal, function(err, res){
+      if(err) throw err;
+      console.log("Comment added");
+      db.close();
+    });
   });
 }
 
@@ -38,6 +44,7 @@ io.on('connection', function(socket){
   });
   socket.on("chat message", function(msg){
     console.log("From: " + msg.name + "    Message: " + msg.message);
+    mongo(msg.message);
   });
 });
 

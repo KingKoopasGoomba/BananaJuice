@@ -26,17 +26,20 @@ mongo();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.io.emit("socketToMe", "normal / index");
+  mongo();
   res.render('index', { results: globalResults, type: "", bee: false });
 });
 
 router.post("/bees",function(req, res){
   res.io.emit("socketToMe", "bees post");
+  mongo();
   res.render("index", {results: globalResults, type: req.body, bee: true});
 });
 
 router.get("/bees", function(req, res){
   console.log(req.query);
   res.io.emit("socketToMe", "bees get");
+  mongo();
   res.render("index", {results: globalResults, type:req.query, bee: true});
 });
 
@@ -46,5 +49,4 @@ router.get("/messages", (req, res) =>{
   });
 });
 
-module.exports = {mongo: mongoClient, url: url};
 module.exports = router;

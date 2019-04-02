@@ -111,3 +111,7 @@ footer p {
   color: rgb(201, 195, 182);
   background-color: rgb(59, 80, 97);
 }
+
+#commentArea{
+  list-style-type: none;
+}
