@@ -115,7 +115,7 @@ router.post('/upload',(req,res) =>{
                                 description: req.body.description,
                                 category: req.body.category,
                                 mimeType: req.files.filename.mimetype,
-                                uploader: req.user,
+                                uploader: req.user.name,
                             });
 
                             newVideo.save()
