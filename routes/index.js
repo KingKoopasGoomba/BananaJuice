@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Videos = require('../models/Video');
-const categories = require('../config/keys').videoCategories;
+const Categories  = require('../models/Category');
 //const { ensureAuthenticated } = require('../config/auth');
 
 var globalResults;
@@ -18,7 +18,13 @@ mongo();
 router.get('/', (req, res) => {
     Videos.find({})
         .then(videos =>{
-            res.render('index', {categories: categories, videos: videos, results: globalResults, type: "", bee: false});
+            Categories.find({})
+                .then(categories => {
+                    //create array of strings og categories
+                    let categoriesArr = [];
+                    categories.forEach(categoryName => categoriesArr.push(categoryName));
+                    res.render('index', {categories: categoriesArr, videos: videos, results: globalResults, type: "", bee: false});
+                })
         });
 });
 

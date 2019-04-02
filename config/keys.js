@@ -6,8 +6,4 @@ module.exports = {
         "video/ogg" ,
 
     ],
-    videoCategories: [
-        "Cat Videos",
-        "Not Cat Videos"
-    ]
 };

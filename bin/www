@@ -10,7 +10,7 @@ var http = require('http');
 var fs = require('fs');
 var path = require('path');
 
-// fs.mkdirSync(path.resolve('public','videos','thumbnails'),{recursive: true});
+fs.mkdirSync(path.resolve('public','videos','thumbnails'),{recursive: true});
 /**
  * Get port from environment and store in Express.
  */

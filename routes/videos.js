@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const Video = require('../models/Video');
 const {exec} = require('child_process');
+
 const supportedFormats = require('../config/keys').videoFormats;
-const categories = require('../config/keys').videoCategories;
+
+const Video = require('../models/Video');
+const Category = require('../models/Category');
 
 router.get('/',(req,res)=> res.redirect('/'));
+
 // video page
 router.get('/playback/:id',(req,res) =>{
 
@@ -69,7 +72,9 @@ router.get('/media/:id',(req, res ) => {
 router.get('/upload',(req, res) =>{
     // check if user is logged in
     if (req.user) {
-        res.render('video/upload',{categories: categories})
+        Category.find({})
+            .then(categories => res.render('video/upload',{categories: categories}))
+            .catch(err => console.log(err));
     } else {
         req.flash('error_msg','please login first');
         res.redirect('/users/login')
@@ -80,16 +85,12 @@ router.get('/upload',(req, res) =>{
 router.post('/upload',(req,res) =>{
     if (req.user) {
         if (req.files){
-            console.log(req.files);
             let file = req.files.filename;
             let filename = Date.now();
-
-            console.log(req.body.name);
 
             // check if received file os of supported format
             if (supportedFormats.includes(req.files.filename.mimetype)) {
                 const filePath = './public/videos/' + filename + '.' + req.files.filename.mimetype.split("/")[1];
-                console.log(filePath);
 
                 file.mv(filePath,  err => {
                     //check for errors
@@ -103,6 +104,19 @@ router.post('/upload',(req,res) =>{
                                 console.log(err)
                             }
                         });
+                        Category.findOne({name: req.body.category})
+                            .then(category =>{
+                                console.log(category)
+                                if (!category){
+                                    console.log("adding to categories db " + req.body.category);
+                                    new Category({
+                                        name: req.body.category
+                                    }).save()
+                                        .then(category => console.log(category))
+                                        .catch(err => console.log(err));
+                                }
+                            })
+                            .catch(err => console.log(err));
                         //add to database
                         Video.countDocuments({}, (err,count) => {
 
@@ -119,12 +133,11 @@ router.post('/upload',(req,res) =>{
                             });
 
                             newVideo.save()
-                                // .then(video => res.redirect('/video/playback/'+video.id))
-                                // .then(video => res.redirect("/bees?name=" + video.id + "#album"))
-                                .then(video => res.redirect("/bees?name=" + video.id + "#album"))
-                                .catch(err => console.log(err));
+                            // .then(video => res.redirect('/video/playback/'+video.id))
+                            // .then(video => res.redirect("/bees?name=" + video.id + "#album"))
+                                .then(video => res.redirect("/bees?id=" + video.id + "#album"))
+                                .catch(err => console.log(err))
                         });
-
 
                     }
                 });
@@ -133,6 +146,7 @@ router.post('/upload',(req,res) =>{
                 res.redirect('/video/upload');
             }
         }
+
 
     } else { // if user not logged in
         req.flash('error_msg','please login first');

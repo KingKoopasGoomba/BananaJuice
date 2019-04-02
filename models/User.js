@@ -16,9 +16,13 @@ const UserSchema = new mongoose.Schema({
     date:{
         type: String,
         default: Date.now()
+    },
+    subscribedCategories: {
+        type: [],
+        required: false
     }
 });
 
-const User = mongoose.model('users',UserSchema);
+const User = mongoose.model('users', UserSchema);
 
 module.exports = User;
