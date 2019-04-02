@@ -111,7 +111,7 @@ router.post('/upload',(req,res) =>{
                                 id: count+1,
                                 name: req.body.name,
                                 videoPath: filePath,
-                                thumbnailPath: './public/videos/thumbnails/'+filename+'.jpg',
+                                thumbnailPath: '/videos/thumbnails/'+filename+'.jpg',
                                 description: req.body.description,
                                 category: req.body.category,
                                 mimeType: req.files.filename.mimetype,

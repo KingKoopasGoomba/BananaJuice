@@ -32,7 +32,7 @@ block content
           each result in results
             .card
               a(href="/bees?id=" + result.id + "#album")
-                img(src=("images/" + result.thumbnail), alt=result.name)
+                img(src=("/" + result.thumbnailPath), alt=result.name)
                 h3=result.name
                 //- https://github.com/onedesign/express-socketio-tutorial
 
