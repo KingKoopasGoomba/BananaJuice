@@ -1,0 +1,8 @@
+extends ../layout
+
+block content
+    form(action='/users/subscribe' method='POST')
+        select(name="categories" multiple=)
+            for category in categories
+                option(value=category)=category
+        input(type="submit")

@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const passport = require('passport');
+const Categories= require('../models/Category');
 // login page
 router.get('/login', (req, res, next) => {
   if (req.user) {
@@ -32,6 +33,34 @@ router.get('/logout',(req, res, next) => {
   res.redirect('/users/login');
 });
 
+// subscribe to users categories
+router.post('/subscribe', (req, res, next) => {
+  if (!req.user) {
+    req.flash('error_msg','Please log in first');
+    res.redirect('/users/login');
+    return;
+  }
+  User.findOneAndUpdate({email:req.user.email},{subscribedCategories: req.body.categories})
+      .then(user => {
+        res.redirect('/dashboard');
+      })
+
+});
+
+router.get('/subscribe',(req,res, next) => {
+  if (!req.user) {
+    res.redirect('/dashboard');
+    return;
+  }
+  Categories.find({})
+      .then(categories => {
+        console.log('here');
+        //create array of strings og categories
+        let categoriesArr = [];
+        categories.forEach(category => categoriesArr.push(category.name));
+        res.render('user/subscribe', {categories: categoriesArr});
+      })
+});
 // register page
 router.get('/register', (req, res, next) => {
   if (req.user) {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Videos = require('../models/Video');
 const Categories  = require('../models/Category');
+const User = require('../models/User');
 //const { ensureAuthenticated } = require('../config/auth');
 
 var globalResults;
@@ -22,7 +23,7 @@ router.get('/', (req, res) => {
                 .then(categories => {
                     //create array of strings og categories
                     let categoriesArr = [];
-                    categories.forEach(categoryName => categoriesArr.push(categoryName));
+                    categories.forEach(category => categoriesArr.push(category.name));
                     res.render('index', {categories: categoriesArr, videos: videos, results: globalResults, type: "", bee: false});
                 })
         });
@@ -30,7 +31,13 @@ router.get('/', (req, res) => {
 
 router.get('/dashboard', (req, res) => {
     if (req.user) {
-        res.render('user/dashboard', {user: req.user.name})
+    Videos.find({})
+        .then(videos => {
+            User.findOne({email: req.user.email})
+                .then(user => {
+                    res.render('user/dashboard', {categories: user.subscribedCategories, results: videos});
+                });
+        });
     } else {
         req.flash('error_msg','please login first');
         res.redirect('/users/login');
