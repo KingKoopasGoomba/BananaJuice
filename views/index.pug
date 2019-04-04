@@ -8,10 +8,14 @@ block content
         .card.card-body.text-center
             if (error_msg !== '')
             =error_msg
-            p Create an account or login
-            a.btn.btn-primary.btn-block.mb-2(href='/users/register') Register
-            a.btn.btn-secondary.btn-block(href='/users/login') Login
-
+            if (!loggedin)
+              p Create an account or login
+              a.btn.btn-primary.btn-block.mb-2(href='/users/register') Register
+              a.btn.btn-secondary.btn-block(href='/users/login') Login
+            else
+              p Welcome
+              a.btn.btn-primary.btn-block.mb-2(href='/dashboard') Dashboard
+              a.btn.btn-secondary.btn-block(href='/users/logout') Logout
   .navbar.navbar-inverse.bg-inverse
     .container.d-flex.justify-content-between
       a.navbar-brand(href="#") Banana Juice
@@ -22,9 +26,6 @@ block content
       h1.jumbotron-heading Album example
       p.lead.text-muted
         | Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.
-      p
-        a.btn.btn-primary(href="/") Home
-        a.btn.btn-secondary(href="/") Home
   section.album.text-muted#album
     .container
       .row

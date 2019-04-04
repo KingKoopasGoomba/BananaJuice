@@ -6,6 +6,8 @@ block content
         h1=video.name
     video(id="videoPlayer" controls autoplay)
         source(src='/video/media/'+video.id type=video.mimeType)
+    div Uploaded by : #{video.uploader}
     div
         =video.category
         =video.description
+

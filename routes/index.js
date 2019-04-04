@@ -24,7 +24,9 @@ router.get('/', (req, res) => {
                     //create array of strings og categories
                     let categoriesArr = [];
                     categories.forEach(category => categoriesArr.push(category.name));
-                    res.render('index', {categories: categoriesArr, videos: videos, results: globalResults, type: "", bee: false});
+                    let loggedIn = false;
+                    if (req.user) loggedIn= true;
+                    res.render('index', {categories: categoriesArr, videos: videos, results: globalResults, type: "", bee: false, loggedin:loggedIn});
                 })
         });
 });
