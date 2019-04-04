@@ -12,7 +12,7 @@ block content
         h3=category
             each result in results
                 .card
-                    if category=result.category
+                    if (category===result.category)
                         a(href="/bees?id=" + result.id + "#album")
                             img(src=result.thumbnailPath, alt=result.name)
                             h3=result.name
