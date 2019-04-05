@@ -147,3 +147,8 @@ footer p {
 .card{
   color: aliceblue ;
 }
+
+.smallerJumbotron{
+  margin-top: 2em;
+  padding: 2em;
+}

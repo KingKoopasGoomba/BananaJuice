@@ -7,19 +7,23 @@ block content
     a.btn.btn-primary(href='/users/logout') Logout
     button(id="btn" onclick="location.href='/'").btn.btn-secondary Home
     button(id="btn" onclick="location.href='/users/subscribe'").btn.btn-secondary Manage Subscriptions
-    each category in categories
-        section
-        h3=category
-            each result in results
-                .card
-                    if (category===result.category)
-                        a(href="/bees?id=" + result.id + "#album")
-                            img(src=result.thumbnailPath, alt=result.name)
-                            h3=result.name
-                            //- https://github.com/onedesign/express-socketio-tutorial
 
-                            p.card-text
-                                if result.description.length > 50
-                                    | #{result.description.substring(0, 50)} . . .
-                                else
-                                    | #{result.description}
+    each category in categories
+        section.jumbotron.text-center.smallerJumbotron
+            .container
+                h3.jumbotron-heading Category: #{category}
+        .container
+            .row
+            
+                each result in results
+                    .card
+                        if (category===result.category)
+                            a(href="/bees?id=" + result.id + "#album")
+                                img(src=result.thumbnailPath, alt=result.name)
+                                //- https://github.com/onedesign/express-socketio-tutorial
+
+                                h5
+                                    if result.description.length > 50
+                                        | #{result.description.substring(0, 50)} . . .
+                                    else
+                                        | #{result.description}
