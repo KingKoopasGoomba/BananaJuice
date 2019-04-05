@@ -129,6 +129,10 @@ footer p {
   border: solid 1px aliceblue;
 }
 
+#commentArea li{
+  font-size: 1.1em;
+}
+
 #messageButton{
   background-color: #15161A;
   opacity: 0.5;

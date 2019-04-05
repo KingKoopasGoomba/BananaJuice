@@ -61,7 +61,7 @@ block content
         for result in results
           if type.id == result.id
             for comment in result.comments
-              li From #{comment.user}
+              li <b><i>#{comment.user}</i></b>
                 p=comment.comment
   footer.text-muted
     .container
@@ -121,7 +121,9 @@ block content
         var ul = document.getElementById("commentArea");
         var li = document.createElement("li");
         var para = document.createElement("p");
-        li.appendChild(document.createTextNode("From anonymous:"));
+        var bold = document.createElement("b");
+        bold.appendChild(document.createTextNode("anonymous"));
+        li.appendChild(bold);
         para.appendChild(document.createTextNode(document.getElementById("m").value));
         li.appendChild(para);
         ul.appendChild(li);

@@ -75,7 +75,6 @@ router.get("/bees", function(req, res){
                     res.render('index', {categories: categoriesArr, videos: videos, results: globalResults, type: req.query, bee: true, loggedin:loggedIn});
                 })
         });
-    // res.render("index", {results: globalResults, type:req.query, bee: true});
 });
 
 router.get("/messages", (req, res) =>{
