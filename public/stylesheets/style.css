@@ -129,6 +129,10 @@ footer p {
   border: solid 1px aliceblue;
 }
 
+#commentArea li{
+  font-size: 1.1em;
+}
+
 #messageButton{
   background-color: #15161A;
   opacity: 0.5;
@@ -142,4 +146,9 @@ footer p {
 
 .card{
   color: aliceblue ;
+}
+
+.smallerJumbotron{
+  margin-top: 2em;
+  padding: 2em;
 }

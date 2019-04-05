@@ -33,7 +33,10 @@ const VideoSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-
+    comments:{
+        type: [],
+        required: false
+    },
 });
 
 const Video = mongoose.model('videos',VideoSchema);

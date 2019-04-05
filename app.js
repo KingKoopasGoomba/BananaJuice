@@ -10,6 +10,7 @@ const upload = require('express-fileupload');
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
+const Videos = require('./models/Video');
 
 // passport config
 require('./lib/passport')(passport);
@@ -18,6 +19,38 @@ require('./lib/passport')(passport);
 mongoose.connect(configKeys.MongoURI, {useNewUrlParser: true})
     .then(() => console.log("mongobd connected"))
     .catch(err => console.log(err));
+
+function mongoChat(message, id){
+  var comment = {comment: message, user: "anonymous", time: Date.now()};
+  Videos.findOneAndUpdate({id: id}, {$push: {comments: comment}}, function(err,obj) { 
+    console.log(obj); 
+  });
+}
+
+// function mongoChatOld(message, name){
+//   mongoClient.connect("mongodb://localhost:27017/", function(err, db){
+//     if(err) throw err;
+//     var dbo = db.db("test");
+//     var myQuery = {name: name};
+//     var newVal = {$push: {comments: {user: "anonymous", comment:message, time:Date.now()}}};
+//     dbo.collection("videos").updateOne(myQuery, newVal, function(err, res){
+//       if(err) throw err;
+//       console.log("Comment added");
+//       db.close();
+//     });
+//   });
+// }
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on("disconnect", function(){
+    console.log("user disconnected");
+  });
+  socket.on("chat message", function(msg){
+    console.log("Video ID: " + msg.name + "    Message: " + msg.message);
+    mongoChat(msg.message, msg.name);
+  });
+});
 
 // view engine
 app.set('view engine', 'pug');
@@ -65,6 +98,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  res.io = io;
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
